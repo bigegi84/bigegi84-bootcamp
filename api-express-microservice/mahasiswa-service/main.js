@@ -36,9 +36,18 @@ const main = async () => {
   });
 
   app.get("/withJurusan", async (req, res) => {
-    const result = await mahasiswa.findAll();
-    const response = await axios.get("http://localhost:3001");
-    res.send({ result, response:response.data });
+    const rMahasiswa = await mahasiswa.findAll();
+    const jurusan = (await axios.get("http://localhost:3001")).data.result;
+    const result = rMahasiswa.map((it) => {
+      const data = { ...it.dataValues };
+      jurusan.forEach((itJ) => {
+        if (it.jurusanId == itJ.id) {
+          data.jurusan = itJ;
+        }
+      });
+      return data;
+    });
+    res.send({ result });
   });
 
   app.listen(port, () => {

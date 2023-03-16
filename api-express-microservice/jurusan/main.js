@@ -1,32 +1,28 @@
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = 3001;
 const { Sequelize } = require("sequelize");
 const sequelize = new Sequelize("sqlite::memory:");
 
 const main = async () => {
-  const mahasiswa = sequelize.define(
-    "mahasiswa",
+  const jurusan = sequelize.define(
+    "jurusan",
     {
-      username: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       nama: {
         type: DataTypes.STRING,
         allowNull: false,
       },
     },
-    {
-      // Other model options go here
-    }
+    {}
   );
-  await mahasiswa.create({
-    username: "bigegi84",
-    nama: "Gilang Pratama Wiguna",
+  await sequelize.sync();
+
+  await jurusan.create({
+    nama: "Teknik Informatika",
   });
+
   app.get("/", async (req, res) => {
-    const result = await mahasiswa.findAll();
+    const result = await jurusan.findAll();
     res.send({ result });
   });
 

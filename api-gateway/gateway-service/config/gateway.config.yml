@@ -9,10 +9,10 @@ apiEndpoints:
     paths: "/ip"
   mahasiswa:
     host: localhost
-    paths: ['/mahasiswas','/mahasiswas/*']
+    paths: '/mahasiswa/*'
   jurusan:
     host: localhost
-    paths: ['/jurusan','/jurusan/*']
+    paths: '/jurusan/*'
 serviceEndpoints:
   httpbin:
     url: "https://httpbin.org"
@@ -30,6 +30,24 @@ policies:
   - proxy
   - rate-limit
 pipelines:
+  mahasiswaPipeline:
+    apiEndpoints:
+      - mahasiswa
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: mahasiswaService
+              changeOrigin: true
+              stripPath:    true
+  jurusanPipeline:
+    apiEndpoints:
+      - jurusan
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: jurusanService
+              changeOrigin: true
+              stripPath:    true
   default:
     apiEndpoints:
       - api
@@ -39,24 +57,4 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: httpbin
-              changeOrigin: true
-  mahasiswaPipeline:
-    apiEndpoints:
-      - mahasiswa
-    policies:
-    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-    # - key-auth:
-      - proxy:
-          - action:
-              serviceEndpoint: mahasiswaService
-              changeOrigin: true
-  jurusanPipeline:
-    apiEndpoints:
-      - jurusan
-    policies:
-    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-    # - key-auth:
-      - proxy:
-          - action:
-              serviceEndpoint: jurusanService
               changeOrigin: true

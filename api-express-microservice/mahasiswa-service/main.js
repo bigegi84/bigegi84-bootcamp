@@ -18,7 +18,7 @@ const main = async () => {
         allowNull: false,
       },
       jurusanId: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },
@@ -28,6 +28,7 @@ const main = async () => {
   await mahasiswa.create({
     username: "bigegi84",
     nama: "Gilang Pratama Wiguna",
+    jurusanId: 1,
   });
   app.get("/", async (req, res) => {
     const result = await mahasiswa.findAll();
@@ -37,7 +38,7 @@ const main = async () => {
   app.get("/withJurusan", async (req, res) => {
     const result = await mahasiswa.findAll();
     const response = await axios.get("http://localhost:3001");
-    res.send({ result, response });
+    res.send({ result, response:response.data });
   });
 
   app.listen(port, () => {

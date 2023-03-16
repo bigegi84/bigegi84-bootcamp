@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const port = 3001;
-const { Sequelize } = require("sequelize");
+const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = new Sequelize("sqlite::memory:");
 
 const main = async () => {

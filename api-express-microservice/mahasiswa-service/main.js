@@ -1,3 +1,4 @@
+const { default: axios } = require("axios");
 const express = require("express");
 const app = express();
 const port = 3000;
@@ -16,10 +17,12 @@ const main = async () => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      jurusanId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
-    {
-      // Other model options go here
-    }
+    {}
   );
   await sequelize.sync();
   await mahasiswa.create({
@@ -29,6 +32,12 @@ const main = async () => {
   app.get("/", async (req, res) => {
     const result = await mahasiswa.findAll();
     res.send({ result });
+  });
+
+  app.get("/withJurusan", async (req, res) => {
+    const result = await mahasiswa.findAll();
+    const response = await axios.get("http://localhost:3001");
+    res.send({ result, response });
   });
 
   app.listen(port, () => {

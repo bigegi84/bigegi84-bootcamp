@@ -7,15 +7,19 @@ apiEndpoints:
   api:
     host: localhost
     paths: "/ip"
-  mahasiswaService:
-    host: localhost:3000
-    paths: "/mahasiswa"
-  jurusanService:
-    host: localhost:3000
-    paths: "/jurusan"
+  mahasiswa:
+    host: localhost
+    paths: ['/mahasiswas','/mahasiswas/*']
+  jurusan:
+    host: localhost
+    paths: ['/jurusan','/jurusan/*']
 serviceEndpoints:
   httpbin:
     url: "https://httpbin.org"
+  mahasiswaService:
+    url: 'http://localhost:3000'
+  jurusanService:
+    url: 'http://localhost:3001'
 policies:
   - basic-auth
   - cors
@@ -35,4 +39,24 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: httpbin
+              changeOrigin: true
+  mahasiswaPipeline:
+    apiEndpoints:
+      - mahasiswa
+    policies:
+    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+    # - key-auth:
+      - proxy:
+          - action:
+              serviceEndpoint: mahasiswaService
+              changeOrigin: true
+  jurusanPipeline:
+    apiEndpoints:
+      - jurusan
+    policies:
+    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+    # - key-auth:
+      - proxy:
+          - action:
+              serviceEndpoint: jurusanService
               changeOrigin: true
